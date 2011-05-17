@@ -36,10 +36,10 @@ module Commands
       put "Updating #{type} status in Pivotal Tracker..."
       if story.update(:owned_by => options[:full_name], :current_state => :started)
 
-        default_desc = story.name.sub(' ', '_')
+        default_desc = story.name.gsub(' ', '_')
         unless options[:quiet] || options[:defaults]
           put "Enter branch description [#{default_desc}]: ", false
-          description = input.gets.chomp.sub(' ', '_').sub('-', '_')
+          description = input.gets.chomp.gsub(' ', '_').gsub('-', '_')
           if description.empty?
             description = default_desc
           end

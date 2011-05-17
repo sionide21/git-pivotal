@@ -73,7 +73,7 @@ module Commands
         line = line.strip
         key, value = line.split '='
         next unless key.match(/^pivotal\.(.*)$/)
-        key = $1.sub('-','_')
+        key = $1.gsub('-','_')
         # Handle Sections
         if key.include? '.'
           sections = key.split '.'
