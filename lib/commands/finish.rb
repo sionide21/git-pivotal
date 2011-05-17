@@ -36,6 +36,7 @@ module Commands
     end
 
     def story_id
+      return options[:story] if options.include? :story
       if m = current_branch.match(BRANCH_REGEX)
         return m[BRANCH_REGEX_ID]
       end

@@ -95,6 +95,7 @@ module Commands
     def parse_argv(*args)
       OptionParser.new do |opts|
         opts.banner = "Usage: git pick [options]"
+        opts.on("-s", "--story=", "Specify the story to use") { |s| options[:story] = s }
         opts.on("-k", "--api-key=", "Pivotal Tracker API key") { |k| options[:api_token] = k }
         opts.on("-p", "--project-id=", "Pivotal Trakcer project id") { |p| options[:project_id] = p }
         opts.on("-n", "--full-name=", "Pivotal Trakcer full name") { |n| options[:full_name] = n }
