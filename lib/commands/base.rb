@@ -100,7 +100,6 @@ module Commands
         opts.on("-n", "--full-name=", "Pivotal Trakcer full name") { |n| options[:full_name] = n }
         opts.on("-b", "--integration-branch=", "The branch to merge finished stories back down onto") { |b| @integration_branch = b }
         opts.on("-m", "--only-mine", "Only select Pivotal Tracker stories assigned to you") { |m| options[:only_mine] = m }
-        opts.on("-a", "--append-name", "whether to append the story id to branch name instead of prepend") { |a| options[:append_name] = a }
         opts.on("-D", "--defaults", "Accept default options. No-interaction mode") { |d| options[:defaults] = d }
         opts.on("-q", "--quiet", "Quiet, no-interaction mode") { |q| options[:quiet] = q }
         opts.on("-v", "--[no-]verbose", "Run verbosely") { |v| options[:verbose] = v }
