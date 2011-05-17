@@ -33,18 +33,18 @@ module Commands
       put "Story: #{story.name}"
       put "URL:   #{story.url}"
 
+      default_desc = story.name.gsub(' ', '_').gsub(/[^a-zA-Z_]/, '')
+      unless options[:quiet] || options[:defaults]
+        put "Enter branch description [#{default_desc}]: ", false
+        description = input.gets.chomp.gsub(' ', '_').gsub('-', '_')
+        if description.empty?
+          description = default_desc
+        end
+      end
+
       put "Updating #{type} status in Pivotal Tracker..."
       if story.update(:owned_by => options[:full_name], :current_state => :started)
-
-        default_desc = story.name.gsub(' ', '_')
-        unless options[:quiet] || options[:defaults]
-          put "Enter branch description [#{default_desc}]: ", false
-          description = input.gets.chomp.gsub(' ', '_').gsub('-', '_')
-          if description.empty?
-            description = default_desc
-          end
-        end
-
+        
         now = Date.today.strftime('%Y%m%d')
         branch = "#{branch_suffix}/#{options[:initials]}-#{now}-#{description}-#{story.id}"
         
