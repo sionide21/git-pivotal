@@ -50,7 +50,7 @@ module Commands
         
         if get("git branch").match(branch).nil?
           put "Switched to a new branch '#{branch}'"
-          sys "git checkout -b #{branch}"
+          sys "git checkout -b #{branch} #{integration_branch}"
         end
 
         return 0
