@@ -49,8 +49,10 @@ module Commands
         branch = "#{branch_suffix}/#{options[:initials]}-#{now}-#{description}-#{story.id}"
         
         if get("git branch").match(branch).nil?
-          put "Switched to a new branch '#{branch}'"
-          sys "git checkout -b #{branch} #{integration_branch}"
+          put "Creating new #{type} branch '#{branch}' from #{integration_branch}"
+          sys "git checkout #{integration_branch}"
+          sys "git pull"
+          sys "git checkout -b #{branch}"
         end
 
         return 0
