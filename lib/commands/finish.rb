@@ -13,9 +13,8 @@ module Commands
 
       put "Marking Story #{story_id} as finished..."
       if story.update(:current_state => finished_state)
-        put "Merging #{current_branch} into #{integration_branch}"
-        sys "git checkout #{integration_branch}"
-        sys "git merge --no-ff #{current_branch}"
+        put "Pushing #{current_branch} to server."
+        sys "git push origin #{current_branch}"
 
         return 0
       else

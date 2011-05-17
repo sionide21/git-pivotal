@@ -3,8 +3,8 @@ require 'pivotal-tracker'
 require 'optparse'
 
 module Commands
-  BRANCH_REGEX = /^([A-Z]{2,3})-([0-9]{8})-([^-]+)-([0-9]+)$/
-  BRANCH_REGEX_ID = 4
+  BRANCH_REGEX = /^([a-z]+)\/([A-Z]{2,3})-([0-9]{8})-([^-]+)-([0-9]+)$/
+  BRANCH_REGEX_ID = 5
   
   class Base
 
@@ -49,7 +49,7 @@ module Commands
   protected
 
     def current_branch
-      @current_branch ||= get('git symbolic-ref HEAD').chomp.split('/').last
+      @current_branch ||= get('git symbolic-ref HEAD').sub('refs/heads/', '')
     end
 
     def project
