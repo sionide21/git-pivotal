@@ -17,9 +17,6 @@ module Commands
         sys "git checkout #{integration_branch}"
         sys "git merge --no-ff #{current_branch}"
 
-        put "Removing #{current_branch} branch"
-        sys "git branch -d #{current_branch}"
-
         return 0
       else
         put "Unable to mark Story #{story_id} as finished"
