@@ -37,6 +37,8 @@ module Commands
       end
 
       PivotalTracker::Client.token = options[:api_token]
+      PivotalTracker::Client.use_ssl = options[:use_ssl] || false
+      
 
       return 0
     end
@@ -56,21 +58,18 @@ module Commands
     end
 
   private
-
+    BOOL_OPTS = [:use_ssl, :only_mine, :append_name]
     def parse_gitconfig
-      token              = get("git config --get pivotal.api-token").strip
-      id                 = get("git config --get pivotal.project-id").strip
-      name               = get("git config --get pivotal.full-name").strip
-      integration_branch = get("git config --get pivotal.integration-branch").strip
-      only_mine          = get("git config --get pivotal.only-mine").strip
-      append_name        = get("git config --get pivotal.append-name").strip
-
-      options[:api_token]          = token              unless token == ""
-      options[:project_id]         = id                 unless id == ""
-      options[:full_name]          = name               unless name == ""
-      options[:integration_branch] = integration_branch unless integration_branch == ""
-      options[:only_mine]          = (only_mine != "")  unless name == ""
-      options[:append_name]        = (append_name != "")
+      get("git config --list").each_line do |line|
+        line = line.strip
+        key, value = line.split '='
+        next unless key.match(/^pivotal\.(.*)$/)
+        key = $1.sub('-','_').to_sym
+        if BOOL_OPTS.include? key
+          value = value == 'true'
+        end
+        options[key] = value
+      end
     end
 
     def parse_argv(*args)
