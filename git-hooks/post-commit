@@ -1,0 +1,7 @@
+#! /bin/bash
+
+git show --pretty=format:"Commited %h:%n%s%n%+b" -s HEAD | git comment 2>&1 > /dev/null
+
+if [ $? -eq 0 ]; then
+	echo "Pushed commit message to Pivotal Tracker."
+fi
