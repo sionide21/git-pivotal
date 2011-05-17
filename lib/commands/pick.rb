@@ -61,7 +61,7 @@ module Commands
       end
     end
 
-  protected
+    protected
 
     def story
       return @story if @story
@@ -69,6 +69,12 @@ module Commands
       conditions = { :story_type => type, :current_state => "unstarted", :limit => 1, :offset => 0 }
       conditions[:owned_by] = options[:full_name] if options[:only_mine]
       @story = project.stories.all(conditions).first
+    end
+    
+    private
+
+    def type_options
+      options[type.to_sym] || {}
     end
   end
 end

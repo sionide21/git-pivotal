@@ -52,23 +52,40 @@ module Commands
     def project
       @project ||= PivotalTracker::Project.find(options[:project_id])
     end
-
+    
     def integration_branch
-      options[:integration_branch] || "master"
+      @integration_branch || type_options[:integration_branch] || "develop"
     end
 
   private
+  
+    def type_options
+      raise Error("must define in subclass")
+    end
+    
     BOOL_OPTS = [:use_ssl, :only_mine, :append_name]
     def parse_gitconfig
       get("git config --list").each_line do |line|
+        opt_section = options
         line = line.strip
         key, value = line.split '='
         next unless key.match(/^pivotal\.(.*)$/)
-        key = $1.sub('-','_').to_sym
+        key = $1.sub('-','_')
+        # Handle Sections
+        if key.include? '.'
+          sections = key.split '.'
+          key = sections.pop
+          sections.each do |section|
+            opt_section[section.to_sym] ||= {}
+            opt_section = opt_section[section.to_sym]
+          end
+        end
+        
+        key = key.to_sym
         if BOOL_OPTS.include? key
           value = value == 'true'
         end
-        options[key] = value
+        opt_section[key] = value
       end
     end
 
@@ -78,7 +95,7 @@ module Commands
         opts.on("-k", "--api-key=", "Pivotal Tracker API key") { |k| options[:api_token] = k }
         opts.on("-p", "--project-id=", "Pivotal Trakcer project id") { |p| options[:project_id] = p }
         opts.on("-n", "--full-name=", "Pivotal Trakcer full name") { |n| options[:full_name] = n }
-        opts.on("-b", "--integration-branch=", "The branch to merge finished stories back down onto") { |b| options[:integration_branch] = b }
+        opts.on("-b", "--integration-branch=", "The branch to merge finished stories back down onto") { |b| @integration_branch = b }
         opts.on("-m", "--only-mine", "Only select Pivotal Tracker stories assigned to you") { |m| options[:only_mine] = m }
         opts.on("-a", "--append-name", "whether to append the story id to branch name instead of prepend") { |a| options[:append_name] = a }
         opts.on("-D", "--defaults", "Accept default options. No-interaction mode") { |d| options[:defaults] = d }

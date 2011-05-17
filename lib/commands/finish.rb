@@ -45,5 +45,11 @@ module Commands
     def story
       @story ||= project.stories.find(story_id)
     end
+
+  private
+
+    def type_options
+      options[story.story_type.to_sym] || {}
+    end
   end
 end
