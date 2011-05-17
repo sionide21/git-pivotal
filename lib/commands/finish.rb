@@ -7,7 +7,7 @@ module Commands
       super
 
       unless story_id
-        put "Branch name must contain a Pivotal Tracker story id"
+        put "Branch does not appear to be a Pivotal Tracker story branch"
         return 1
       end
 
@@ -36,7 +36,9 @@ module Commands
     end
 
     def story_id
-      current_branch[/\d+/].to_i
+      if m = current_branch.match(BRANCH_REGEX)
+        return m[BRANCH_REGEX_ID]
+      end
     end
 
     def story

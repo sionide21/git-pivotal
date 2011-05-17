@@ -3,6 +3,9 @@ require 'pivotal-tracker'
 require 'optparse'
 
 module Commands
+  BRANCH_REGEX = /^([A-Z]{2,3})-([0-9]{8})-([^-]+)-([0-9]+)$/
+  BRANCH_REGEX_ID = 4
+  
   class Base
 
     attr_accessor :input, :output, :options

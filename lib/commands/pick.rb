@@ -36,18 +36,18 @@ module Commands
       put "Updating #{type} status in Pivotal Tracker..."
       if story.update(:owned_by => options[:full_name], :current_state => :started)
 
-        suffix_or_prefix = ""
+        default_desc = story.name.sub(' ', '_')
         unless options[:quiet] || options[:defaults]
-          put "Enter branch name (will be #{options[:append_name] ? 'appended' : 'prepended'} by #{story.id}) [#{suffix_or_prefix}]: ", false
-          suffix_or_prefix = input.gets.chomp
+          put "Enter branch description [#{default_desc}]: ", false
+          description = input.gets.chomp.sub(' ', '_').sub('-', '_')
+          if description.empty?
+            description = default_desc
+          end
         end
-        suffix_or_prefix = branch_suffix if suffix_or_prefix == ""
 
-        if options[:append_name]
-          branch = "#{suffix_or_prefix}-#{story.id}"
-        else
-          branch = "#{story.id}-#{suffix_or_prefix}"
-        end
+        now = Date.today.strftime('%Y%m%d')
+        branch = "#{branch_suffix}/#{options[:initials]}-#{now}-#{description}-#{story.id}"
+        
         if get("git branch").match(branch).nil?
           put "Switched to a new branch '#{branch}'"
           sys "git checkout -b #{branch}"

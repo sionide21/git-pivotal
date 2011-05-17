@@ -21,7 +21,9 @@ module Commands
   protected
 
     def story_id
-      current_branch[/\d+/].to_i
+      if m = current_branch.match(BRANCH_REGEX)
+        return m[BRANCH_REGEX_ID].to_i
+      end
     end
 
     def story
