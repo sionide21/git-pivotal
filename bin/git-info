@@ -3,5 +3,6 @@
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'commands/info'
+require 'commands/runner'
 
-exit Commands::Info.new(STDIN, STDOUT, *ARGV).run!
+Commands::run(Commands::Info)

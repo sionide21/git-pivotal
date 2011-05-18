@@ -3,6 +3,8 @@
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'commands/feature'
+require 'commands/runner'
 
 STDOUT.puts "DEPRECATION WARNING: git pick has been deprecated.  Please use git feature instead."
-exit Commands::Feature.new(STDIN, STDOUT, *ARGV).run!
+
+Commands::run(Commands::Feature)

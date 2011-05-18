@@ -6,6 +6,9 @@ module Commands
   BRANCH_REGEX = /^([a-z]+)\/([A-Z]{2,3})-([0-9]{8})-([^-]+)-([0-9]+)$/
   BRANCH_REGEX_ID = 5
   
+  class NoSuchStory < Exception
+  end
+  
   class Base
 
     attr_accessor :input, :output, :options
@@ -61,6 +64,25 @@ module Commands
     end
 
   private
+  
+    def get_and_print_story(error_msg)
+      return @story if @story
+      @story = fetch_story
+      
+      raise NoSuchStory, error_msg unless @story
+
+      put "Story: #{@story.name}"
+      put "URL:   #{@story.url}"
+      
+      return @story
+    end
+    
+    def search_story(conditions)
+      if options.include? :story
+        return project.stories.find(options[:story])
+      end
+      return project.stories.all(conditions).first
+    end
   
     def type_options
       raise Error("must define in subclass")

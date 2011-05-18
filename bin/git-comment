@@ -3,5 +3,6 @@
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'commands/comment'
+require 'commands/runner'
 
-exit Commands::Comment.new(STDIN, STDOUT, *ARGV).run!
+Commands::run(Commands::Comment)

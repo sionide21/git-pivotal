@@ -25,13 +25,7 @@ module Commands
       end
       put "#{msg}..."
 
-      unless story
-        put "No #{plural_type} available!"
-        return 0
-      end
-
-      put "Story: #{story.name}"
-      put "URL:   #{story.url}"
+      story = get_and_print_story "No #{plural_type} available!"
 
       default_desc = story.name.gsub(' ', '_').gsub(/[^a-zA-Z_]/, '')
       unless options[:quiet] || options[:defaults]
@@ -65,15 +59,10 @@ module Commands
 
     protected
 
-    def story
-      return @story if @story
-      if options.include? :story
-        @story = project.stories.find(options[:story])
-        return @story
-      end
+    def fetch_story
       conditions = { :story_type => type, :current_state => "unstarted", :limit => 1, :offset => 0 }
       conditions[:owned_by] = options[:full_name] if options[:only_mine]
-      @story = project.stories.all(conditions).first
+      search_story conditions
     end
     
     private

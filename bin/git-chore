@@ -3,5 +3,6 @@
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'commands/chore'
+require 'commands/runner'
 
-exit Commands::Chore.new(STDIN, STDOUT, *ARGV).run!
+Commands::run(Commands::Chore)
