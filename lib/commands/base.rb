@@ -3,9 +3,6 @@ require 'pivotal-tracker'
 require 'optparse'
 
 module Commands
-  BRANCH_REGEX = /^([a-z]+)\/([0-9]{8})-([A-Z]{2,3})-([^-]+)-([0-9]+)$/
-  BRANCH_REGEX_TYPE = 1
-  BRANCH_REGEX_ID = 5
   
   class NoSuchStory < Exception
   end
@@ -63,18 +60,20 @@ module Commands
     def integration_branch
       @integration_branch || type_options[:integration_branch] || "develop"
     end
-
-  private
   
     def get_and_print_story(error_msg)
+      story = get_story
+
+      put "Story: #{story.name}"
+      put "URL:   #{story.url}"
+      
+      return story
+    end
+    
+    def get_story
       return @story if @story
       @story = fetch_story
-      
       raise NoSuchStory, error_msg unless @story
-
-      put "Story: #{@story.name}"
-      put "URL:   #{@story.url}"
-      
       return @story
     end
     
@@ -84,14 +83,9 @@ module Commands
       end
       return project.stories.all(conditions).first
     end
-  
-    def type_options
-      if m = current_branch.match(BRANCH_REGEX)
-        return options[m[BRANCH_REGEX_TYPE]] || {}
-      end
-      return {}
-    end
     
+    private
+
     BOOL_OPTS = [:use_ssl, :only_mine, :append_name]
     def parse_gitconfig
       get("git config --list").each_line do |line|

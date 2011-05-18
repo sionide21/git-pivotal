@@ -1,7 +1,9 @@
 require 'commands/base'
+require 'commands/pivotal_branch'
 
 module Commands
   class Finish < Base
+    include PivotalBranch
 
     def run!
       super
@@ -10,6 +12,8 @@ module Commands
         put "Branch does not appear to be a Pivotal Tracker story branch"
         return 1
       end
+
+      story = get_story
 
       put "Marking Story #{story_id} as finished..."
       if story.update(:current_state => finished_state)
@@ -32,23 +36,6 @@ module Commands
       else
         "finished"
       end
-    end
-
-    def story_id
-      return options[:story] if options.include? :story
-      if m = current_branch.match(BRANCH_REGEX)
-        return m[BRANCH_REGEX_ID]
-      end
-    end
-
-    def story
-      @story ||= project.stories.find(story_id)
-    end
-
-  private
-
-    def type_options
-      options[story.story_type.to_sym] || {}
     end
   end
 end

@@ -1,34 +1,23 @@
 require 'commands/base'
+require 'commands/pivotal_branch'
 
 module Commands
   class Info < Base
+    include PivotalBranch
 
     def run!
       super
 
-      unless story_id
-        put "Branch name must contain a Pivotal Tracker story id"
-        return 1
-      end
+      story = get_story
 
       put "Story:         #{story.name}"
       put "URL:           #{story.url}"
+      put "Created:       #{story.created_at.strftime '%B %d, %Y'}"
+      put "State:         #{story.current_state.capitalize}"
+      put "Estimate:      #{story.estimate}"
       put "Description:   #{story.description}"
 
       return 0
-    end
-
-  protected
-
-    def story_id
-      return options[:story] if options.include? :story
-      if m = current_branch.match(BRANCH_REGEX)
-        return m[BRANCH_REGEX_ID].to_i
-      end
-    end
-
-    def story
-      @story ||= project.stories.find(story_id)
     end
   end
 end

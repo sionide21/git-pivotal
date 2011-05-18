@@ -1,4 +1,5 @@
 require 'commands/pick'
+require 'commands/pivotal_branch'
 
 module Commands
   class Review < Base
@@ -41,7 +42,7 @@ module Commands
       branches = []
       get("git branch -r | grep '^  origin/.*\\-#{id}$'").each_line do |branch|
         branch = branch.strip.sub(/^origin\//, '')
-        if branch.match(BRANCH_REGEX)
+        if branch.match(PivotalBranch::BRANCH_REGEX)
           branches << branch
         end
       end
