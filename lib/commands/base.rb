@@ -53,7 +53,7 @@ module Commands
   protected
 
     def current_branch
-      @current_branch ||= get('git symbolic-ref HEAD').sub('refs/heads/', '')
+      @current_branch ||= get('git symbolic-ref HEAD').sub('refs/heads/', '').strip
     end
 
     def project
