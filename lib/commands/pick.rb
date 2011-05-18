@@ -2,17 +2,28 @@ require 'commands/base'
 
 module Commands
   class Pick < Base
+    StoryType = Struct.new(:type, :plural_type, :branch_suffix)
+    Types = {
+      :feature => StoryType.new('feature', 'features', 'feature'),
+      :bug     => StoryType.new('bug', 'bugs', 'bugfix'),
+      :chore   => StoryType.new('chore', 'chores', 'chore')
+    }
+
+    def initialize(type, *args)
+      super(*args)
+      @type = Types[type]
+    end
 
     def type
-      raise Error("must define in subclass")
+      @type.type
     end
 
     def plural_type
-      raise Error("must define in subclass")
+      @type.plural_type
     end
 
     def branch_suffix
-      raise Error("must define in subclass")
+      @type.branch_suffix
     end
 
     def run!

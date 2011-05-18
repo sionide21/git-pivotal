@@ -2,18 +2,8 @@ require 'commands/pick'
 
 module Commands
   class Feature < Pick
-
-    def type
-      "feature"
+    def initialize(*args)
+      super(:feature, *args)
     end
-    
-    def plural_type
-      "features"
-    end
-    
-    def branch_suffix
-      "feature"
-    end
-
   end
 end

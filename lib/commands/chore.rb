@@ -2,18 +2,8 @@ require 'commands/pick'
 
 module Commands
   class Chore < Pick
-
-    def type
-      "chore"
+    def initialize(*args)
+      super(:chore, *args)
     end
-    
-    def plural_type
-      "chores"
-    end
-    
-    def branch_suffix
-      "chore"
-    end
-
   end
 end

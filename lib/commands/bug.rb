@@ -2,18 +2,8 @@ require 'commands/pick'
 
 module Commands
   class Bug < Pick
-
-    def type
-      "bug"
+    def initialize(*args)
+      super(:bug, *args)
     end
-    
-    def plural_type
-      "bugs"
-    end
-    
-    def branch_suffix
-      "bugfix"
-    end
-
   end
 end
