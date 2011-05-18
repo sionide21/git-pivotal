@@ -9,7 +9,10 @@ module Commands
       puts "Retrieving latest finished stories from Pivotal Tracker"
       story = get_and_print_story "No finished stories available!"
       
-      
+      put "Check this story out for review? [Y/n]: ", false
+      unless ['y', 'yes', ''].include? gets.strip.downcase
+        return 0
+      end
       
       puts "Running git fetch"
       sys("git fetch")
@@ -18,9 +21,12 @@ module Commands
       
       branch = find_story_branch(story.id)
       
-      puts "Checking out story branch for review"
+      if get("git branch").each_line.any? {|b| b.sub('*','').strip == branch }
+        raise "A branch for this story already exists locally:\n\t#{branch}"
+      end
       
-      #sys("git checkout -b #{branch} origin/#{branch}")
+      puts "Checking out story branch for review"
+      sys("git checkout --track -b #{branch} origin/#{branch}")
       
       puts "You are now in the review branch for this story."
       puts "You can see the diff with: "
@@ -40,7 +46,7 @@ module Commands
         end
       end
       if branches.size != 1
-        raise Exception, "!! Cannot locate story branch."
+        raise "!! Cannot locate story branch."
       end
       return branches.first
     end
