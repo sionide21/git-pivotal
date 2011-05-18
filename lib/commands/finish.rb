@@ -8,11 +8,6 @@ module Commands
     def run!
       super
 
-      unless story_id
-        put "Branch does not appear to be a Pivotal Tracker story branch"
-        return 1
-      end
-
       story = get_story
 
       put "Marking Story #{story_id} as finished..."
