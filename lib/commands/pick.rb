@@ -5,7 +5,7 @@ module Commands
     StoryType = Struct.new(:type, :plural_type, :branch_suffix)
     Types = {
       :feature => StoryType.new('feature', 'features', 'feature'),
-      :bug     => StoryType.new('bug', 'bugs', 'bugfix'),
+      :bug     => StoryType.new('bug', 'bugs', 'hotfix'),
       :chore   => StoryType.new('chore', 'chores', 'chore')
     }
 
@@ -51,7 +51,7 @@ module Commands
       if story.update(:owned_by => options[:full_name], :current_state => :started)
         
         now = Date.today.strftime('%Y%m%d')
-        branch = "#{branch_suffix}/#{options[:initials]}-#{now}-#{description}-#{story.id}"
+        branch = "#{branch_suffix}/#{now}-#{options[:initials]}-#{description}-#{story.id}"
         
         if get("git branch").match(branch).nil?
           put "Creating new #{type} branch '#{branch}' from #{integration_branch}"

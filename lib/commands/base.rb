@@ -3,7 +3,8 @@ require 'pivotal-tracker'
 require 'optparse'
 
 module Commands
-  BRANCH_REGEX = /^([a-z]+)\/([A-Z]{2,3})-([0-9]{8})-([^-]+)-([0-9]+)$/
+  BRANCH_REGEX = /^([a-z]+)\/([0-9]{8})-([A-Z]{2,3})-([^-]+)-([0-9]+)$/
+  BRANCH_REGEX_TYPE = 1
   BRANCH_REGEX_ID = 5
   
   class NoSuchStory < Exception
@@ -85,7 +86,10 @@ module Commands
     end
   
     def type_options
-      raise Error("must define in subclass")
+      if m = current_branch.match(BRANCH_REGEX)
+        return options[m[BRANCH_REGEX_TYPE]] || {}
+      end
+      return {}
     end
     
     BOOL_OPTS = [:use_ssl, :only_mine, :append_name]
