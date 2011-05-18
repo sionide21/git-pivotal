@@ -2,8 +2,7 @@ require 'commands/base'
 
 def Commands::run(command)
   begin
-    command.new(STDIN, STDOUT, *ARGV).run! || 0
-    exit 1
+    result = command.new(STDIN, STDOUT, *ARGV).run!
   rescue Commands::NoSuchStory => e
     puts e
     exit 1
@@ -13,4 +12,5 @@ def Commands::run(command)
     puts e
     exit 3
   end
+  exit result || 0
 end
