@@ -24,9 +24,13 @@ module Commands
       @output.print(newline ? string + "\n" : string) unless options[:quiet]
     end
 
-    def sys(cmd)
+    def sys(cmd, output=false)
       put cmd if options[:verbose]
-      system "#{cmd} > /dev/null 2>&1"
+      if output
+        system cmd
+      else
+        system "#{cmd} > /dev/null 2>&1"
+      end
     end
 
     def get(cmd)

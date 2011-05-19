@@ -1,3 +1,5 @@
+require 'commands/pick'
+
 module Commands::PivotalBranch
   BRANCH_REGEX = /^([a-z]+)\/([0-9]{8})-([A-Z]{2,3})-([^-]+)-([0-9]+)$/
   BRANCH_REGEX_TYPE = 1
@@ -6,10 +8,15 @@ module Commands::PivotalBranch
   private
 
   def type_options
+    return options[story_type] || {}
+  end
+  
+  def story_type
     if m = current_branch.match(BRANCH_REGEX)
-      return options[m[BRANCH_REGEX_TYPE]] || {}
+      branch_suffix = m[BRANCH_REGEX_TYPE]
+      return Commands::Pick::Types.values.find{ |t| t.branch_suffix == branch_suffix }.type
     end
-    return {}
+    return nil
   end
     
   def story_id

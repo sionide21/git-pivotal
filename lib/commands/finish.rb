@@ -26,7 +26,7 @@ module Commands
   protected
 
     def finished_state
-      if story.story_type == "chore"
+      if get_story.story_type == "chore"
         "accepted"
       else
         "finished"
