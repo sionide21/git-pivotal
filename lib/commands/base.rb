@@ -66,7 +66,7 @@ module Commands
     end
   
     def get_and_print_story(error_msg)
-      story = get_story
+      story = get_story(error_msg)
 
       put "Story: #{story.name}"
       put "URL:   #{story.url}"
@@ -74,10 +74,12 @@ module Commands
       return story
     end
     
-    def get_story
+    def get_story(error_msg = nil)
       return @story if @story
       @story = fetch_story
-      raise NoSuchStory, error_msg unless @story
+      if error_msg
+        raise NoSuchStory, error_msg unless @story
+      end
       return @story
     end
     
