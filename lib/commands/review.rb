@@ -51,7 +51,11 @@ module Commands
       end
       return branches.first
     end
-    
+
+    def type_options
+      options[get_story.story_type.to_sym] || {}
+    end
+
     def fetch_story
       search_story({ :current_state => "finished", :limit => 1, :offset => 0 })
     end
