@@ -8,7 +8,7 @@ module Commands::PivotalBranch
   private
 
   def type_options
-    return options[story_type] || {}
+    return options[story_type.to_sym] || {}
   end
   
   def story_type
