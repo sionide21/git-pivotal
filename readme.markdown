@@ -46,6 +46,7 @@ Once installed, git pivotal needs three bits of info: your Pivotal Tracker API T
 
     git config --global pivotal.api-token 9a9a9a9a9a9a9a9a9a9a
     git config --global pivotal.full-name "Jeff Tucker"
+    git config --global pivotal.initials "JT"
 
 If you prefer to merge back to a branch other than master when you've finished a story, you can configure that:
 
