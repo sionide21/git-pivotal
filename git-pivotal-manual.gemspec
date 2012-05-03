@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
     "git-hooks/post-commit",
     "git-pivotal.gemspec",
     "lib/**",
+    "lib/**/**",
     "readme.markdown"
   ]
   s.homepage = 'http://github.com/trydionel/git-pivotal'
