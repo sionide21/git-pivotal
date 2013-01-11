@@ -39,6 +39,7 @@ module Commands
       story = get_and_print_story "No #{plural_type} available!"
 
       default_desc = story.name.gsub(' ', '_').gsub(/[^a-zA-Z_]/, '')
+      default_desc = default_desc.length > 175 ? default_desc[0..172].strip+'...' : default_desc
       unless options[:quiet] || options[:defaults]
         put "Enter branch description [#{default_desc}]: ", false
         description = input.gets.chomp.gsub(' ', '_').gsub('-', '_')
